@@ -1,2 +1,2 @@
-# apnea_detection
+# Apnea detection README
 Apnea detection model
