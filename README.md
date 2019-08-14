@@ -1,2 +1,2 @@
 # Apnea Detection
-Apnea detection model
+Apnea Detection Model
