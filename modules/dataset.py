@@ -53,7 +53,7 @@ class DataGenerator(Sequence):
 
         # Generate data
         for i, ID in enumerate(list_IDs_temp):
-            X[i,]   = np.load('data/arrays/{}/{}'.format(self.db_part, ID))
+            X[i,]   = np.load('../data/arrays/{}/{}'.format(self.db_part, ID))
             Y[i]    = self.ID_to_label(ID)
 
         return X, to_categorical(Y, num_classes=self.n_classes)
