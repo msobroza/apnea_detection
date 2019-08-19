@@ -1,5 +1,5 @@
-from keras.layers import (Input, Dense, BatchNormalization, Dropout, Activation, Concatenate, Lambda)
-from keras.models import Model
+from keras.layers import (Input, Dense, BatchNormalization, Dropout, Activation, Concatenate, Lambda, Flatten)
+from keras.models import Model, Sequential
 import keras.backend as K
 
     
@@ -29,6 +29,8 @@ def DLMA(
     batch_size=500,
     embedding_size=300
 ):
+    '''Decision Multi Level Attention'''
+
     # Embedded layers
     input_layer = Input(shape=(time_steps, freq_bins))
 
@@ -62,6 +64,26 @@ def DLMA(
     output_layer = Activation('softmax')(b1)
 
     model = Model(inputs=input_layer, outputs=output_layer)
+    model.summary()
+
+    return model
+
+def SBL(
+    time_steps=3,
+    freq_bins=128,
+    hidden_units_rnn=256,
+    hidden_units=1024,
+    batch_size=500
+):
+    '''Siple Binary Classifier'''
+
+    model = Sequential()
+
+    model.add(Flatten())
+    model.add(Dense(freq_bins))
+    model.add(Dense(2))
+    model.add(Activation('softmax'))
+
     model.summary()
 
     return model
