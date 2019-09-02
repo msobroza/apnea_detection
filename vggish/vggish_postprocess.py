@@ -89,3 +89,22 @@ class Postprocessor(object):
     quantized_embeddings = quantized_embeddings.astype(np.uint8)
 
     return quantized_embeddings
+
+  def postprocess_single_sample(self, embeddings_batch, max_dims):
+    """Applies postprocessing to a single sample of embeddings.
+    Args:
+        embeddings_batch: An nparray of shape [batch_size, embedding_size]
+        containing output from the embedding layer of VGGish.
+    Returns:
+        An nparray of the same shape as the input but of type uint8,
+        containing the PCA-transformed and quantized version of the input.
+    """
+    quantized_embeddings = self.postprocess(embeddings_batch)
+    if len(quantized_embeddings.shape) == 2:
+      if quantized_embeddings.shape[0] < max_dims:
+        quantized_embeddings = np.pad(quantized_embeddings, pad_width=((0,max_dims-quantized_embeddings.shape[0]),(0,0)),mode='mean')
+      if quantized_embeddings.shape[0] == max_dims:
+        quantized_embeddings = np.expand_dims(quantized_embeddings, axis=-1)
+      else:
+        quantized_embeddings = self.window_stack(quantized_embeddings, width=10, step_size=1)
+    return quantized_embeddings

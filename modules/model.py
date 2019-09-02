@@ -29,7 +29,7 @@ def DLMA(
     batch_size=500,
     embedding_size=300
 ):
-    '''Decision Multi Level Attention'''
+    'Decision Level Multi Attention'
 
     # Embedded layers
     input_layer = Input(shape=(time_steps, freq_bins))
@@ -68,22 +68,25 @@ def DLMA(
 
     return model
 
-def SBL(
+def SBC(
     time_steps=3,
     freq_bins=128,
     hidden_units_rnn=256,
     hidden_units=1024,
     batch_size=500
 ):
-    '''Siple Binary Classifier'''
+    'Simple Binary Classifier'
 
-    model = Sequential()
+    input_layer = Input(shape=(time_steps, freq_bins))
 
-    model.add(Flatten())
-    model.add(Dense(freq_bins))
-    model.add(Dense(2))
-    model.add(Activation('softmax'))
-
+    x = Flatten()(input_layer)
+    x = Dense(freq_bins)(x)
+    x = Activation('relu')(x)
+    x = Dense(2)(x)
+    
+    output_layer = Activation('softmax')(x)
+    
+    model = Model(inputs=input_layer, outputs=output_layer)
     model.summary()
 
     return model
